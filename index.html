@@ -1,77 +1,10 @@
-const inquirer = require("inquirer");
-const axios = require("axios");
-const fs = require('fs')
-const createHTML = require('create-html')
+<!doctype html>
+<html lang="en" dir="rtl">
+<head>
+<title>Profile Generator</title>
+<meta charset="utf-8">
 
-    const colors = {
-        green: {
-            wrapperBackground: "#E6E1C3",
-            headerBackground: "#C1C72C",
-            headerColor: "black",
-            photoBorderColor: "#black"
-        },
-    blue: {
-        wrapperBackground: "#5F64D3",
-        headerBackground: "#26175A",
-        headerColor: "white",
-        photoBorderColor: "#73448C"
-    },
-    pink: {
-        wrapperBackground: "#879CDF",
-        headerBackground: "#FF8374",
-        headerColor: "white",
-        photoBorderColor: "#FEE24C"
-    },
-    red: {
-        wrapperBackground: "#DE9967",
-        headerBackground: "#870603",
-        headerColor: "white",
-        photoBorderColor: "white"
-    }
-};
-
-const questions = [
-    {
-        type: "input",
-        message: "What is your user name?",
-        name: "username"
-    },
-    {
-        type: "list",
-        message: "What is your favorite color?",
-        choices: ["green", "blue", "pink", "red"],
-        name: "color"
-    }
-];
-
-function init() {
-    inquirer
-    .prompt(questions)
-    .then(function (data) {
-        const queryURL = `https://api.github.com/users/${data.username}`; 
-        switch(data.color){
-            case "green":
-                data.color = 0;
-                break;
-                case "blue":
-                    data.color = 1;
-                    break;
-                    case "pink":
-                        data.color = 2;
-                        break;
-                        case "red":
-                            data.color = 3;
-                            break;
-                        }
-        axios
-        .get(queryURL)
-        .then((res) => {
-
-            const html = createHTML({
-                title: 'Profile Generator',
-                lang: 'en',
-                dir: 'rtl',
-                head: `<meta charset="UTF-8" />
+<meta charset="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <meta http-equiv="X-UA-Compatible" content="ie=edge" />
                 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"/>
@@ -94,7 +27,7 @@ function init() {
                    height: 100%;
                    }
                    .wrapper {
-                   background-color: ${data.color};
+                   background-color: 0;
                    padding-top: 100px;
                    }
                    body {
@@ -136,8 +69,8 @@ function init() {
                    display: flex;
                    justify-content: center;
                    flex-wrap: wrap;
-                   background-color: ${data.color};
-                   color: ${data.color};
+                   background-color: 0;
+                   color: 0;
                    padding: 10px;
                    width: 95%;
                    border-radius: 6px;
@@ -148,7 +81,7 @@ function init() {
                    border-radius: 50%;
                    object-fit: cover;
                    margin-top: -75px;
-                   border: 6px solid ${data.color};
+                   border: 6px solid 0;
                    box-shadow: rgba(0, 0, 0, 0.3) 4px 1px 20px 4px;
                    }
                    .photo-header h1, .photo-header h2 {
@@ -191,8 +124,8 @@ function init() {
                    .card {
                      padding: 20px;
                      border-radius: 6px;d
-                     background-color: ${data.color};
-                     color: ${data.color};
+                     background-color: 0;
+                     color: 0;
                      margin: 20px;
                    }
                    
@@ -212,30 +145,12 @@ function init() {
                       zoom: .75; 
                     } 
                    }
-                </style>`,
-                body: `<div><img src="${res.data.avatar_url}"></div>
-                
-                
-                
-                
-                `
-                ,
-            
-              })
-              fs.writeFile('index.html', html, function (err) {
-                if (err) console.log(err)
-              })
+                </style>
 
 
-        })
-    })
-}
+</head>
+<body>
+<div><img src="https://avatars3.githubusercontent.com/u/58451541?v=4"></div>
 
-
-
-
-
-init();
-
-
-
+</body>
+</html>
