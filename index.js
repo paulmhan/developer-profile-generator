@@ -1,3 +1,4 @@
+let choiceColor;
 const inquirer = require("inquirer");
 const axios = require("axios");
 const fs = require('fs')
@@ -51,16 +52,16 @@ function init() {
             const queryURL = `https://api.github.com/users/${data.username}`;
             switch (data.color) {
                 case "green":
-                    data.color = 0;
+                    choiceColor = 0;
                     break;
                 case "blue":
-                    data.color = 1;
+                    choiceColor = 1;
                     break;
                 case "pink":
-                    data.color = 2;
+                    choiceColor = 2;
                     break;
                 case "red":
-                    data.color = 3;
+                    choiceColor = 3;
                     break;
             }
             axios
@@ -94,7 +95,7 @@ function init() {
                    height: 100%;
                    }
                    .wrapper {
-                   background-color: ${data.color};
+                   background-color: ${colors[choiceColor]};
                    padding-top: 100px;
                    }
                    body {
@@ -136,8 +137,9 @@ function init() {
                    display: flex;
                    justify-content: center;
                    flex-wrap: wrap;
-                   background-color: ${data.color};
-                   color: ${data.color};
+                   background-color: ${colors[choiceColor]};
+                    color: ${colors[choiceColor]};
+
                    padding: 10px;
                    width: 95%;
                    border-radius: 6px;
@@ -148,7 +150,7 @@ function init() {
                    border-radius: 50%;
                    object-fit: cover;
                    margin-top: -75px;
-                   border: 6px solid ${data.color};
+                   border: 6px solid ${colors[choiceColor]};
                    box-shadow: rgba(0, 0, 0, 0.3) 4px 1px 20px 4px;
                    }
                    .photo-header h1, .photo-header h2 {
@@ -190,9 +192,9 @@ function init() {
             
                    .card {
                      padding: 20px;
-                     border-radius: 6px;d
-                     background-color: ${data.color};
-                     color: ${data.color};
+                     border-radius: 6px;
+                     background-color: ${colors[choiceColor]};
+                     color: ${colors[choiceColor]};
                      margin: 20px;
                    }
                    
@@ -213,17 +215,29 @@ function init() {
                     } 
                    }
                 </style>`,
-                        body: `<div class="card"><img src="${res.data.avatar_url}"></div>
-                        <div class="card">${res.data.id}</div>
-                        <div class="card">${res.data.bio}</div>
-                        <div class="card">${res.data.public_repos}</div>
-                        <div class="card">${res.data.followers}</div>
-                        <div class="card">${res.data.following}</div>
-                        <div class="card">${res.data.public_repos}</div>
+                        body: `
+                        
+                        
+                        
+                        <div class="containter">
+                        <div class="row">
+                        <div class="col">
+                        <div class="card photo-header"><img src="${res.data.avatar_url}"></div>
+                        <div class="card">Username: ${res.data.login}</div>
+                        <div class="card">Bio: ${res.data.bio}</div>
+                        <div class="card">Number of Repos: ${res.data.public_repos}</div>
+                        <div class="card">Followers: ${res.data.followers}</div>
+                        <div class="card">Following: ${res.data.following}</div>
                         <div class="card">${res.data.blog}</div>
                         <div class="card" class="links">
-                        <a href="${res.data.url}">Profile</a>
-                        }</div>
+                        <a href="${res.data.url}">Link to GitHub</a>
+                        </div>
+                        </div>
+
+
+
+                        </div>
+                        </div>
                         
                 
               
