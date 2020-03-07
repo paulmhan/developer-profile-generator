@@ -3,13 +3,13 @@ const axios = require("axios");
 const fs = require('fs')
 const createHTML = require('create-html')
 
-    const colors = {
-        green: {
-            wrapperBackground: "#E6E1C3",
-            headerBackground: "#C1C72C",
-            headerColor: "black",
-            photoBorderColor: "#black"
-        },
+const colors = {
+    green: {
+        wrapperBackground: "#E6E1C3",
+        headerBackground: "#C1C72C",
+        headerColor: "black",
+        photoBorderColor: "#black"
+    },
     blue: {
         wrapperBackground: "#5F64D3",
         headerBackground: "#26175A",
@@ -46,32 +46,32 @@ const questions = [
 
 function init() {
     inquirer
-    .prompt(questions)
-    .then(function (data) {
-        const queryURL = `https://api.github.com/users/${data.username}`; 
-        switch(data.color){
-            case "green":
-                data.color = 0;
-                break;
+        .prompt(questions)
+        .then(function (data) {
+            const queryURL = `https://api.github.com/users/${data.username}`;
+            switch (data.color) {
+                case "green":
+                    data.color = 0;
+                    break;
                 case "blue":
                     data.color = 1;
                     break;
-                    case "pink":
-                        data.color = 2;
-                        break;
-                        case "red":
-                            data.color = 3;
-                            break;
-                        }
-        axios
-        .get(queryURL)
-        .then((res) => {
+                case "pink":
+                    data.color = 2;
+                    break;
+                case "red":
+                    data.color = 3;
+                    break;
+            }
+            axios
+                .get(queryURL)
+                .then((res) => {
 
-            const html = createHTML({
-                title: 'Profile Generator',
-                lang: 'en',
-                dir: 'rtl',
-                head: `<meta charset="UTF-8" />
+                    const html = createHTML({
+                        title: 'Profile Generator',
+                        lang: 'en',
+                        dir: 'rtl',
+                        head: `<meta charset="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <meta http-equiv="X-UA-Compatible" content="ie=edge" />
                 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"/>
@@ -213,22 +213,32 @@ function init() {
                     } 
                    }
                 </style>`,
-                body: `<div><img src="${res.data.avatar_url}"></div>
+                        body: `<div class="card"><img src="${res.data.avatar_url}"></div>
+                        <div class="card">${res.data.id}</div>
+                        <div class="card">${res.data.bio}</div>
+                        <div class="card">${res.data.public_repos}</div>
+                        <div class="card">${res.data.followers}</div>
+                        <div class="card">${res.data.following}</div>
+                        <div class="card">${res.data.public_repos}</div>
+                        <div class="card">${res.data.blog}</div>
+                        <div class="card" class="links">
+                        <a href="${res.data.url}">Profile</a>
+                        }</div>
+                        
+                
+              
                 
                 
-                
-                
-                `
-                ,
-            
-              })
-              fs.writeFile('index.html', html, function (err) {
-                if (err) console.log(err)
-              })
+                `,
+
+                    })
+                    fs.writeFile('index.html', html, function (err) {
+                        if (err) console.log(err)
+                    })
 
 
+                })
         })
-    })
 }
 
 
