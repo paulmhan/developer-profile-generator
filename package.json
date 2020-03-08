@@ -8,6 +8,7 @@
     "create-html": "^4.1.0",
     "electron-html-to": "^2.6.0",
     "fs": "0.0.1-security",
+    "html-to-pdf": "^0.1.11",
     "inquirer": "^7.0.6"
   },
   "devDependencies": {},

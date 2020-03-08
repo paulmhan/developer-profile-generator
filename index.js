@@ -3,6 +3,7 @@ const inquirer = require("inquirer");
 const axios = require("axios");
 const fs = require('fs')
 const createHTML = require('create-html')
+const htmlToPdf = require('html-to-pdf');
 
 const colors = {
     green: {
@@ -214,37 +215,49 @@ function init() {
                       zoom: .75; 
                     } 
                    }
+
+                   .pic{
+                       text-align: center;
+                   }
                 </style>`,
                         body: `
                         
-                        
-                        
-                        <div class="containter">
-                        <div class="row">
-                        <div class="col">
-                        <div class="card photo-header"><img src="${res.data.avatar_url}"></div>
-                        <div class="card">Username: ${res.data.login}</div>
-                        <div class="card">Bio: ${res.data.bio}</div>
-                        <div class="card">Number of Repos: ${res.data.public_repos}</div>
-                        <div class="card">Followers: ${res.data.followers}</div>
-                        <div class="card">Following: ${res.data.following}</div>
-                        <div class="card">${res.data.blog}</div>
-                        <div class="card" class="links">
-                        <a href="${res.data.url}">Link to GitHub</a>
-                        </div>
-                        </div>
-
-
-
-                        </div>
-                        </div>
-                        
-                
-              
-                
-                
+                    
+                        <div class="wrapper">
+                            <div class="photo-header">
+                              <img class="img" src="${res.data.avatar_url}">
+                              <h1>Hi</h1>
+                              <h2>My name is ${res.data.login}</h2>
+                              <i class="fas fa-map-marker-alt">
+                                <a class="nav-link">Emeryville, CA</a>
+                              </i>
+                              <i class="fas fa-id-card">
+                                <a href="${res.data.html_url}" class="nav-link">GitHub</a>
+                              </i>
+                            </div>
+                            <div class="container">
+                               <div class="bio">
+                               <h4>Bio</h4>
+                                <h3>${res.data.bio}</h3>
+                               </div>
+                               <div class="row">
+                                  <div class="card col">
+                                    <h3>Public Repositories</h3>
+                                    <h4>${res.data.public_repos}</h4>
+                                  </div>
+                                  <div class="card col">
+                                    <h3>Followers</h3>
+                                    <h4>${res.data.followers}</h4>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="card col">
+                                    <h3>Following</h3>
+                                    <h4>${res.data.following}</h4>
+                                  </div>
+                                </div>
+                            </div>
                 `,
-
                     })
                     fs.writeFile('index.html', html, function (err) {
                         if (err) console.log(err)
@@ -253,9 +266,11 @@ function init() {
 
                 })
         })
-}
 
+        
 
+        
+    }
 
 
 
