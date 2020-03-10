@@ -6,89 +6,89 @@ const createHTML = require('create-html')
 const htmlToPdf = require('html-to-pdf');
 
 const colors = [
-    {
-        wrapperBackground: "#E6E1C3",
-        headerBackground: "#C1C72C",
-        headerColor: "black",
-        photoBorderColor: "#black"
-    },
-    {
-        wrapperBackground: "#5F64D3",
-        headerBackground: "#26175A",
-        headerColor: "white",
-        photoBorderColor: "#73448C"
-    },
-    {
-        wrapperBackground: "#879CDF",
-        headerBackground: "#FF8374",
-        headerColor: "white",
-        photoBorderColor: "#FEE24C"
-    },
-    {
-        wrapperBackground: "#DE9967",
-        headerBackground: "#870603",
-        headerColor: "white",
-        photoBorderColor: "white"
-    }
-  ];
+  {
+    wrapperBackground: "#E6E1C3",
+    headerBackground: "#C1C72C",
+    headerColor: "black",
+    photoBorderColor: "#black"
+  },
+  {
+    wrapperBackground: "#5F64D3",
+    headerBackground: "#26175A",
+    headerColor: "white",
+    photoBorderColor: "#73448C"
+  },
+  {
+    wrapperBackground: "#879CDF",
+    headerBackground: "#FF8374",
+    headerColor: "white",
+    photoBorderColor: "#FEE24C"
+  },
+  {
+    wrapperBackground: "#DE9967",
+    headerBackground: "#870603",
+    headerColor: "white",
+    photoBorderColor: "white"
+  }
+];
 
 const questions = [
-    {
-        type: "input",
-        message: "What is your user name?",
-        name: "username"
-    },
-    {
-        type: "list",
-        message: "What is your favorite color?",
-        choices: ["green", "blue", "pink", "red"],
-        name: "color"
-    }
+  {
+    type: "input",
+    message: "What is your user name?",
+    name: "username"
+  },
+  {
+    type: "list",
+    message: "What is your favorite color?",
+    choices: ["green", "blue", "pink", "red"],
+    name: "color"
+  }
 ];
 
 function init() {
-    inquirer
-        .prompt(questions)
-        .then(function ({username, color}) {
-            const queryURL = `https://api.github.com/users/${username}`;
-            switch (color) {
-                case "green":
-                    data.color = 0;
-                    break;
-                case "blue":
-                    data.color = 1;
-                    break;
-                case "pink":
-                    data.color = 2;
-                    break;
-                case "red":
-                    data.color = 3;
-                    break;
-            }
-            
+  inquirer
+    .prompt(questions)
+    .then(function ({ username, color }) {
+      const queryURL = `https://api.github.com/users/${username}`;
+      switch (color) {
+        case "green":
+          data.color = 0;
+          break;
+        case "blue":
+          data.color = 1;
+          break;
+        case "pink":
+          data.color = 2;
+          break;
+        case "red":
+          data.color = 3;
+          break;
+      }
 
 
 
 
 
-            axios
-                .get(queryURL)
-                .then((res) => {
-                  data.username = username;
-                  data.numOfRepo = res.data.public_repos;
-                  data.followers = res.data.followers;
-                  data.following = res.data.following;
-                  data.portPic = res.data.avatar_url;
-                  data.blog = res.data.blog; 
-                  data.bio = res.data.bio;
-                  
+
+      axios
+        .get(queryURL)
+        .then((res) => {
+          data.username = username;
+          data.numOfRepo = res.data.public_repos;
+          data.followers = res.data.followers;
+          data.following = res.data.following;
+          data.portPic = res.data.avatar_url;
+          data.blog = res.data.blog;
+          data.bio = res.data.bio;
 
 
-                    const html = createHTML({
-                        title: 'Profile Generator',
-                        lang: 'en',
-                        dir: 'rtl',
-                        head: `<meta charset="UTF-8" />
+
+          const html = createHTML({
+            title: 'Profile Generator',
+            lang: 'en',
+            dir: 'rtl',
+            head: `<meta charset="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <meta http-equiv="X-UA-Compatible" content="ie=edge" />
                 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"/>
@@ -231,7 +231,7 @@ function init() {
                     }
            
                 </style>`,
-                        body: `
+            body: `
                     
           <header>
           <div class="wrapper">
@@ -275,23 +275,33 @@ function init() {
           </div>
 
                 `,
-                    })
-                    fs.writeFile('index.html', html, function (err) {
-                        if (err) console.log(err)
-                    })
+          })
+          fs.writeFile('index.html', html, function (err) {
+            if (err) console.log(err)
+          })
 
 
-                })
         })
+    })
 
-        
 
-        
-    }
+
+
+}
 
 
 
 init();
 
-
+htmlToPdf.convertHTMLFile('index.html', 'index.pdf',
+    function (error, success) {
+       if (error) {
+            console.log('Oh noes! Errorz!');
+            console.log(error);
+        } else {
+            console.log('Woot! Success!');
+            console.log(success);
+        }
+    }
+);
 
