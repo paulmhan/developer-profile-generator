@@ -1,4 +1,4 @@
-let choiceColor = 0;
+let data = {};
 const inquirer = require("inquirer");
 const axios = require("axios");
 const fs = require('fs')
@@ -49,25 +49,40 @@ const questions = [
 function init() {
     inquirer
         .prompt(questions)
-        .then(function (data) {
-            const queryURL = `https://api.github.com/users/${data.username}`;
-            switch (data.color) {
+        .then(function ({username, color}) {
+            const queryURL = `https://api.github.com/users/${username}`;
+            switch (color) {
                 case "green":
-                    choiceColor = 0;
+                    data.color = 0;
                     break;
                 case "blue":
-                    choiceColor = 1;
+                    data.color = 1;
                     break;
                 case "pink":
-                    choiceColor = 2;
+                    data.color = 2;
                     break;
                 case "red":
-                    choiceColor = 3;
+                    data.color = 3;
                     break;
             }
+            
+
+
+
+
+
             axios
                 .get(queryURL)
                 .then((res) => {
+                  data.username = username;
+                  data.numOfRepo = res.data.public_repos;
+                  data.followers = res.data.followers;
+                  data.following = res.data.following;
+                  data.portPic = res.data.avatar_url;
+                  data.blog = res.data.blog; 
+                  data.bio = res.data.bio;
+                  
+
 
                     const html = createHTML({
                         title: 'Profile Generator',
@@ -83,180 +98,182 @@ function init() {
                     @page {
                       margin: 0;
                     }
-                   *,
-                   *::after,
-                   *::before {
-                   box-sizing: border-box;
-                   }
-                   html, body {
-                   padding: 0;
-                   margin: 0;
-                   }
-                   html, body, .wrapper {
-                   height: 100%;
-                   }
-                   .wrapper {
-                   background-color: ${colors[choiceColor].wrapperBackground};
-                   padding-top: 100px;
-                   }
-                   body {
-                   background-color: white;
-                   -webkit-print-color-adjust: exact !important;
-                   font-family: 'Cabin', sans-serif;
-                   }
-                   main {
-                   background-color: #E9EDEE;
-                   height: auto;
-                   padding-top: 30px;
-                   }
-                   h1, h2, h3, h4, h5, h6 {
-                   font-family: 'BioRhyme', serif;
-                   margin: 0;
-                   }
-                   h1 {
-                   font-size: 3em;
-                   }
-                   h2 {
-                   font-size: 2.5em;
-                   }
-                   h3 {
-                   font-size: 2em;
-                   }
-                   h4 {
-                   font-size: 1.5em;
-                   }
-                   h5 {
-                   font-size: 1.3em;
-                   }
-                   h6 {
-                   font-size: 1.2em;
-                   }
-                   .photo-header {
-                   position: relative;
-                   margin: 0 auto;
-                   margin-bottom: -50px;
-                   display: flex;
-                   justify-content: center;
-                   flex-wrap: wrap;
-                   background-color: ${colors[choiceColor]};
-                    color: ${colors[choiceColor]};
-
-                   padding: 10px;
-                   width: 95%;
-                   border-radius: 6px;
-                   }
-                   .photo-header img {
-                   width: 250px;
-                   height: 250px;
-                   border-radius: 50%;
-                   object-fit: cover;
-                   margin-top: -75px;
-                   border: 6px solid ${colors[choiceColor]};
-                   box-shadow: rgba(0, 0, 0, 0.3) 4px 1px 20px 4px;
-                   }
-                   .photo-header h1, .photo-header h2 {
-                   width: 100%;
-                   text-align: center;
-                   }
-                   .photo-header h1 {
-                   margin-top: 10px;
-                   }
-                   .links-nav {
-                   width: 100%;
-                   text-align: center;
-                   padding: 20px 0;
-                   font-size: 1.1em;
-                   }
-                   .nav-link {
-                   display: inline-block;
-                   margin: 5px 10px;
-                   }
-                   .workExp-date {
-                   font-style: italic;
-                   font-size: .7em;
-                   text-align: right;
-                   margin-top: 10px;
-                   }
-                   .container {
-                   padding: 50px;
-                   padding-left: 100px;
-                   padding-right: 100px;
-                   }
-            
-                   .row {
-                     display: flex;
-                     flex-wrap: wrap;
-                     justify-content: space-between;
-                     margin-top: 20px;
-                     margin-bottom: 20px;
-                   }
-            
-                   .card {
-                     padding: 20px;
-                     border-radius: 6px;
-                     background-color: ${colors[choiceColor]};
-                     color: ${colors[choiceColor]};
-                     margin: 20px;
-                   }
-                   
-                   .col {
-                   flex: 1;
-                   text-align: center;
-                   }
-            
-                   a, a:hover {
-                   text-decoration: none;
-                   color: inherit;
-                   font-weight: bold;
-                   }
-            
-                   @media print { 
-                    body { 
-                      zoom: .75; 
-                    } 
-                   }
-
-                   .pic{
-                       text-align: center;
-                   }
+                    *,
+                    *::after,
+                    *::before {
+                    box-sizing: border-box;
+                    }
+                    html, body {
+                    padding: 0;
+                    margin: 0;
+                    }
+                    html, body, .wrapper {
+                    height: 100%;
+                    }
+                    .wrapper {
+                    background-color: ${colors[data.color].wrapperBackground};
+                    padding-top: 100px;
+                    }
+                    body {
+                    background-color: white;
+                    -webkit-print-color-adjust: exact !important;
+                    font-family: 'Cabin', sans-serif;
+                    }
+                    main {
+                    background-color: #E9EDEE;
+                    height: auto;
+                    padding-top: 30px;
+                    }
+                    h1, h2, h3, h4, h5, h6 {
+                    font-family: 'BioRhyme', serif;
+                    margin: 0;
+                    }
+                    h1 {
+                    font-size: 3em;
+                    }
+                    h2 {
+                    font-size: 2.5em;
+                    }
+                    h3 {
+                    font-size: 2em;
+                    }
+                    h4 {
+                    font-size: 1.5em;
+                    }
+                    h5 {
+                    font-size: 1.3em;
+                    }
+                    h6 {
+                    font-size: 1.2em;
+                    }
+                    .photo-header {
+                    position: relative;
+                    margin: 0 auto;
+                    margin-bottom: -50px;
+                    display: flex;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    background-color: ${colors[data.color].headerBackground};
+                    color: ${colors[data.color].headerColor};
+                    padding: 10px;
+                    width: 95%;
+                    border-radius: 6px;
+                    }
+                    .photo-header img {
+                    width: 250px;
+                    height: 250px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    margin-top: -75px;
+                    border: 6px solid ${colors[data.color].photoBorderColor};
+                    box-shadow: rgba(0, 0, 0, 0.3) 4px 1px 20px 4px;
+                    }
+                    .photo-header h1, .photo-header h2 {
+                    width: 100%;
+                    text-align: center;
+                    }
+                    .photo-header h1 {
+                    margin-top: 10px;
+                    }
+                    .links-nav {
+                    width: 100%;
+                    text-align: center;
+                    padding: 20px 0;
+                    font-size: 1.1em;
+                    }
+                    .nav-link {
+                    display: inline-block;
+                    margin: 5px 10px;
+                    }
+                    .workExp-date {
+                    font-style: italic;
+                    font-size: .7em;
+                    text-align: right;
+                    margin-top: 10px;
+                    }
+                    .container {
+                    padding: 50px;
+                    padding-left: 100px;
+                    padding-right: 100px;
+                    }
+           
+                    .row {
+                      display: flex;
+                      flex-wrap: wrap;
+                      justify-content: space-between;
+                      margin-top: 20px;
+                      margin-bottom: 20px;
+                    }
+           
+                    .card {
+                      padding: 20px;
+                      border-radius: 6px;
+                      background-color: ${colors[data.color].headerBackground};
+                      color: ${colors[data.color].headerColor};
+                      margin: 20px;
+                    }
+                    
+                    .col {
+                    flex: 1;
+                    text-align: center;
+                    }
+           
+                    a, a:hover {
+                    text-decoration: none;
+                    color: inherit;
+                    font-weight: bold;
+                    }
+           
+                    @media print { 
+                     body { 
+                       zoom: .75; 
+                     } 
+                    }
+           
                 </style>`,
                         body: `
-                        
                     
-                        <div class="wrapper">
-                            <div class="photo-header">
-                              <img class="img" src="${res.data.avatar_url}">
-                              <h1>Hi</h1>
-                              <h2>My name is ${res.data.login}</h2>
-                              <i class="fas fa-map-marker-alt">
-                                <a class="nav-link">Emeryville, CA</a>
-                              </i>
-                              <i class="fas fa-id-card">
-                                <a href="${res.data.html_url}" class="nav-link">GitHub</a>
-                              </i>
-                            </div>
-                            <div class="container">
-                               <div class="bio">
-                               <h4>Bio</h4>
-                                <h3>${res.data.bio}</h3>
-                               </div>
-                               <div class="row">
-                                  <div class="card col">
-                                    <h3>Public Repositories</h3>
-                                    <h4>${res.data.public_repos}</h4>
-                                  </div>
-                                  <div class="card col">
-                                    <h3>Followers</h3>
-                                    <h4>${res.data.followers}</h4>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="card col">
-                                    <h3>Following</h3>
-                                    <h4>${res.data.following}</h4>
-                                  </div>
-                                </div>
-                            </div>
+          <header>
+          <div class="wrapper">
+            <div class='photo-header'>
+              <img src="${data.portPic}"><br>
+              <h1>Hi</h1>
+              <h2>My name is ${data.username}</h2>
+              <div class="links-nav">
+                <a class="nav-link" href="https://github.com/${data.username}">github</a>
+                <a class="nav-link" href="${data.blog}">blog</a>
+              </div>
+  
+            </div>
+          </header>
+  
+          <div class="container">
+            <div class="row">
+            <div class="col">
+                <h4>${data.bio}</h4>
+            </div>
+            </div>
+            <div class="row">
+              <div class='col card'>
+                <h2>Public repositories </h1>
+                ${data.numOfRepo}
+              </div>
+  
+              <div class="col card">
+                <h2>Followers</h1>
+                ${data.followers}
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="card col">
+                <h2>Following</h2>
+                ${data.followers}
+              </div>
+            </div>
+  
+          </div>
+
                 `,
                     })
                     fs.writeFile('index.html', html, function (err) {
