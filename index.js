@@ -4,6 +4,19 @@ const inquirer = require("inquirer");
 const pdf = require("html-pdf");
 let data = {};
 
+const questions = [
+  {
+    type: "input",
+    message: "Enter your Github username",
+    name: "username"
+  },
+  {
+    type: "list",
+    message: "What is your favorite color",
+    choices: ['green', 'blue', 'pink', 'red'],
+    name: "color"
+  }
+];
 
 const colors = [
   {
@@ -17,7 +30,7 @@ const colors = [
     headerBackground: "#26175A",
     headerColor: "white",
     photoBorderColor: "#73448C"
-  },
+  }, 
   {
     wrapperBackground: "#879CDF",
     headerBackground: "#FF8374",
@@ -33,30 +46,16 @@ const colors = [
 ]
 
 
-const questions = [
-  {
-    type: "input",
-    message: "Enter your github username",
-    name: "name"
-  },
-  {
-    type: "list",
-    message: "what is your favorite color",
-    choices: ['green', 'blue', 'pink', 'red'],
-    name: "color"
-  }
-
-];
-
 function init() {
-
   inquirer
     .prompt(questions)
     .then(function ({ username, color }) {
       const queryUrl = `https://api.github.com/users/${username}`;
+
       axios 
         .get(queryUrl)
         .then((res) => {
+
           switch (color) {
             case 'green':
               data.color = 0;
@@ -71,53 +70,42 @@ function init() {
               data.color = 3;
               break;
           }
-
+          
           data.name = res.data.name
           data.username = username;
-          data.picture = res.data.avatar_url;
+          data.company = res.data.company;
+          data.blog = res.data.blog;
+          data.bio = res.data.bio;
+          data.profile = res.data.avatar_url;
           data.numOfRepo = res.data.public_repos;
           data.followers = res.data.followers;
           data.following = res.data.following;
-          data.blog = res.data.blog;
-          data.bio = res.data.bio;
 
-          axios 
-            .get(`https://api.github.com/users/${data.username}/repos?per_page=100`)
+          axios
+            .get(`https://api.github.com/users/${username}/repos?per_page=100`)
             .then((res) => {
-
               data.stars = 0;
               for (let i = 0; i < res.data.length; i++) {
                 data.stars += res.data[i].stargazers_count;
               }
-
               let profileHtml = generateHTML(data);
-
               fs.writeFile("profile.html", profileHtml, function (err) {
-
                 if (err) {
                   return console.log(err);
                 }
-
-                console.log("Success!");
               const html = fs.readFileSync('profile.html', 'utf8');
               const options = { format: 'A4' };
-
               pdf.create(html, options).toFile('profile.pdf', function (err, res) {
                 if (err) return console.log(err);
               });
-
               });
-              
             });
-            
         });
-        
-        
     })
-    
 }
 
 init();
+
 
 
 function generateHTML(data) {
@@ -267,7 +255,7 @@ function generateHTML(data) {
       <header>
       <div class="wrapper">
       <div class ="photo-header">
-      <img src="${data.picture}">
+      <img src="${data.profile}">
       <h1>Hi!</h1>
       <h2>My name is ${data.name} </h2>
       <h3>Currently @ ${data.company} </h3>
