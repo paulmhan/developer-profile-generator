@@ -6,7 +6,7 @@ Created a command-line application that dynamically generates a PDF profile from
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
 ```bash
 # Install all dependencies 
@@ -33,6 +33,9 @@ The PDF will be populated with the following:
 - Number of public repositories
 - Number of followers
 - Number of users following
+
+![Alt text](./assets/images/image1.png?raw=true)
+![Alt text](./assets/images/image2.png?raw=true)
 
 ## Built With
 
